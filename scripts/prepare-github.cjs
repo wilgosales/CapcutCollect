@@ -18,7 +18,16 @@ async function main() {
  const pkg=JSON.parse(await fs.readFile(path.join(root,'package.json'),'utf8'));
  if(pkg.license!=='MIT')throw Error('Expected the selected MIT license');
  const base=path.join(root,'github-ready');const repository=path.join(base,'repository');const release=path.join(base,'release','v'+pkg.version);
- if(require('node:fs').existsSync(repository)||require('node:fs').existsSync(release))throw Error('github-ready output already exists. Preserve or move it before preparing another snapshot.');
+ let previousSnapshot;
+ if(require('node:fs').existsSync(base)) {
+  const backups=path.join(root,'.local-backups');
+  previousSnapshot=path.join(backups,'github-ready-'+crypto.randomUUID());
+  if(path.dirname(base)!==root || path.dirname(backups)!==root || path.dirname(previousSnapshot)!==backups)throw Error('Backup path outside workspace');
+  if((await fs.lstat(base)).isSymbolicLink())throw Error('Snapshot output cannot be a link');
+  await fs.mkdir(backups,{recursive:true});
+  if((await fs.lstat(backups)).isSymbolicLink())throw Error('Backup directory cannot be a link');
+  await fs.rename(base,previousSnapshot);
+ }
  const installerName='CapCut-Collect-Setup-'+pkg.version+'-win-x64.exe';
  const installer=path.join(root,'dist','v'+pkg.version,installerName);await fs.access(installer);
  const selected=[...files];for(const directory of directories)for(const file of await walk(path.join(root,directory)))selected.push(path.relative(root,file).split(path.sep).join('/'));
@@ -45,6 +54,6 @@ async function main() {
  const releaseFiles=(await fs.readdir(release)).filter(file=>file!=='SHA256SUMS.txt').sort();
  const sums=[];for(const file of releaseFiles)sums.push(await hash(path.join(release,file))+'  '+file);
  await fs.writeFile(path.join(release,'SHA256SUMS.txt'),sums.join('\n')+'\n');
- console.log(JSON.stringify({version:pkg.version,repository,release,sourceFiles:unique.length,sourceBytes:bytes,releaseFiles:[...releaseFiles,'SHA256SUMS.txt']},null,2));
+ console.log(JSON.stringify({version:pkg.version,repository,release,sourceFiles:unique.length,sourceBytes:bytes,previousSnapshot,releaseFiles:[...releaseFiles,'SHA256SUMS.txt']},null,2));
 }
 main().catch(error=>{console.error(error.message);process.exitCode=1;});

@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible issue without sharing private projects or media.
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Collect version
+    validations:
+      required: true
+  - type: input
+    id: capcut
+    attributes:
+      label: CapCut version and Windows version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Use a synthetic example. Redact user names and local paths.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
