@@ -1,0 +1,75 @@
+{
+  "name": "capcut-collect",
+  "version": "0.6.0-beta.1",
+  "private": true,
+  "description": "Portable CapCut project collections with experimental desktop integration",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "start": "node src/launch.cjs",
+    "serve": "node src/cli.cjs serve",
+    "collect": "node src/cli.cjs",
+    "desktop": "electron .",
+    "build:win": "node scripts/build-win.cjs",
+    "prepare:github": "node scripts/prepare-github.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "frida": "17.24.3",
+    "jsonc-parser": "3.3.1",
+    "yauzl": "3.4.0",
+    "yazl": "3.3.1"
+  },
+  "devDependencies": {
+    "electron": "44.9.2",
+    "electron-builder": "26.15.3"
+  },
+  "main": "desktop/main.cjs",
+  "author": "CapCut Collect",
+  "build": {
+    "appId": "app.capcutcollect.desktop",
+    "productName": "CapCut Collect",
+    "directories": {
+      "output": "dist/v0.6.0-beta.1"
+    },
+    "files": [
+      "desktop/**/*",
+      "src/**/*",
+      "ui/**/*",
+      "package.json",
+      "assets/icon.png",
+      "assets/icon.ico",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "third-party-licenses/**/*"
+    ],
+    "asar": false,
+    "npmRebuild": false,
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": true,
+      "artifactName": "CapCut-Collect-Setup-${version}-win-x64.${ext}",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "runAfterFinish": false,
+      "language": "1033",
+      "installerLanguages": [
+        "en_US"
+      ],
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "installerHeaderIcon": "assets/icon.ico"
+    },
+    "publish": null
+  },
+  "license": "MIT",
+  "overrides": {
+    "global-agent": "4.1.3"
+  }
+}

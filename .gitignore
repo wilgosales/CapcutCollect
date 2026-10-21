@@ -1,0 +1,33 @@
+# Dependencies and generated output
+node_modules/
+.npm-cache/
+.build-cache/
+dist/
+github-ready/
+release/
+*.log
+*.partial-*
+# Private local research, media and test artifacts
+Colecoes/
+Importados/
+testes/
+investigacao-integracao/
+relatorio-capcut-collect/
+RELATORIO-*.md
+auditar-capcut.ps1
+prova-portabilidade*.ps1
+scripts/validate-library.cjs
+scripts/validate-real.cjs
+assets/*
+!assets/icon.png
+!assets/icon.ico
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.pem
+*.key
+.DS_Store
+Thumbs.db
